@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WhereDNS — learn the path, inspect the proof</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#query"><span class="brand-mark">W</span><span>WhereDNS</span></a>
+    <nav aria-label="Main navigation">
+      <button class="nav-link active" data-view="query">Query</button>
+      <button class="nav-link" data-view="attacks">Attack atlas</button>
+      <button class="nav-link" data-view="lab">Laboratory</button>
+      <button class="nav-link" data-view="learn">Learn</button>
+    </nav>
+    <div class="status"><span class="pulse"></span>local engine</div>
+  </header>
+
+  <main>
+    <section class="view active" id="view-query">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">DNS, without the black box</p>
+          <h1>Follow every answer<br><em>back to its authority.</em></h1>
+          <p class="lede">Inspect packets, cache decisions, referrals, DNSSEC evidence, and the security meaning behind every flag.</p>
+        </div>
+        <div class="query-card">
+          <form id="query-form">
+            <label class="domain-label" for="domain">Domain or DNS name</label>
+            <div class="query-line">
+              <input id="domain" name="domain" value="example.com" autocomplete="off" spellcheck="false">
+              <select id="qtype" aria-label="Record type">
+                <option>A</option><option>AAAA</option><option>MX</option><option>NS</option><option>SOA</option><option>TXT</option><option>CAA</option><option>SRV</option><option>HTTPS</option><option>DNSKEY</option><option>DS</option><option>PTR</option><option>ANY</option>
+              </select>
+            </div>
+            <div class="options-grid">
+              <label>Transport<select id="transport"><option value="udp">UDP + fallback</option><option value="tcp">TCP</option><option value="dot">DNS over TLS</option><option value="doh">DNS over HTTPS</option></select></label>
+              <label>Resolver<input id="resolver" placeholder="system default"></label>
+            </div>
+            <div class="toggles">
+              <label><input id="cache" type="checkbox" checked><span>Use WhereDNS cache</span></label>
+              <label><input id="dnssec" type="checkbox" checked><span>Request DNSSEC</span></label>
+            </div>
+            <div class="actions">
+              <button class="primary" type="submit">Run query <span>↗</span></button>
+              <button class="secondary" type="button" id="trace-button">Trace from root</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="query-state" class="state-panel empty">
+        <div class="empty-mark">⌁</div>
+        <h2>Your resolution will appear here</h2>
+        <p>Run a recursive query or walk the hierarchy directly from a root server.</p>
+      </div>
+      <section id="result" class="result hidden" aria-live="polite"></section>
+    </section>
+
+    <section class="view" id="view-attacks">
+      <div class="section-head">
+        <div><p class="eyebrow">Defender's field guide</p><h1>DNS attack atlas</h1></div>
+        <p>Mechanism, prerequisites, evidence, and mitigations—kept distinct so you learn how to reason, not just memorize names.</p>
+      </div>
+      <div class="filter-row"><input id="attack-search" placeholder="Filter attacks, signals, or defenses…"><span id="attack-count"></span></div>
+      <div id="attack-grid" class="card-grid"></div>
+    </section>
+
+    <section class="view" id="view-lab">
+      <div class="section-head">
+        <div><p class="eyebrow">Isolated by design</p><h1>DNS security laboratory</h1></div>
+        <p>Deterministic exercises teach offensive mechanics through defender-visible state. No spoofing, flooding, or external targets.</p>
+      </div>
+      <div id="lab-grid" class="card-grid"></div>
+      <section id="lab-result" class="lesson-detail hidden"></section>
+    </section>
+
+    <section class="view" id="view-learn">
+      <div class="section-head">
+        <div><p class="eyebrow">Protocol foundations</p><h1>Build the mental model</h1></div>
+        <p>Short lessons connect protocol concepts to commands you can run in the standalone CLI.</p>
+      </div>
+      <div id="topic-grid" class="topic-list"></div>
+    </section>
+  </main>
+
+  <footer><span>WhereDNS</span><span>Queries originate from this machine · Web API bound to loopback</span></footer>
+  <script src="/app.js" defer></script>
+</body>
+</html>

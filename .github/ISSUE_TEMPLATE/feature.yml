@@ -1,0 +1,25 @@
+name: Feature request
+description: Suggest a protocol, visualization, or defensive-learning improvement.
+title: "feature: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Learning or operational problem
+      description: What should a learner or defender be able to understand or do?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: Security and authorization considerations
+      description: Explain any network effects, mutation, abuse potential, or isolation boundary.
+    validations:
+      required: true
