@@ -1,4 +1,4 @@
-# WhereDNS
+# WhereDNS (AI GENERATED)
 
 [![CI](https://github.com/MinottiAlessandro/WhereDNS/actions/workflows/ci.yml/badge.svg)](https://github.com/MinottiAlessandro/WhereDNS/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/MinottiAlessandro/WhereDNS)](https://github.com/MinottiAlessandro/WhereDNS/releases/latest)
