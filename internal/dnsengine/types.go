@@ -102,16 +102,19 @@ type TraceResult struct {
 }
 
 type TraceStep struct {
-	Number      int      `json:"number"`
-	Role        string   `json:"role"`
-	Server      string   `json:"server"`
-	Address     string   `json:"address"`
-	Question    string   `json:"question"`
-	Rcode       string   `json:"rcode"`
-	DurationMS  float64  `json:"duration_ms"`
-	Event       string   `json:"event"`
-	Explanation string   `json:"explanation"`
-	Records     []Record `json:"records"`
+	Number        int      `json:"number"`
+	Role          string   `json:"role"`
+	Server        string   `json:"server"`
+	Address       string   `json:"address"`
+	Question      string   `json:"question"`
+	Rcode         string   `json:"rcode"`
+	DurationMS    float64  `json:"duration_ms"`
+	FromCache     bool     `json:"from_cache"`
+	Transport     string   `json:"transport"`
+	ResponseBytes int      `json:"response_bytes"`
+	Event         string   `json:"event"`
+	Explanation   string   `json:"explanation"`
+	Records       []Record `json:"records"`
 }
 
 type CacheEntryInfo struct {

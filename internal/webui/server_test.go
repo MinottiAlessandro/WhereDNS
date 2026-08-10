@@ -36,3 +36,28 @@ func TestLabAPI(t *testing.T) {
 		t.Fatalf("status=%d body=%s", response.Code, response.Body.String())
 	}
 }
+
+func TestVisualizationAssetsAndAttackFlow(t *testing.T) {
+	cache, _ := dnsengine.NewCache("")
+	handler := New(dnsengine.New(cache)).Handler()
+
+	for path, expected := range map[string]string{
+		"/":           "attack-detail",
+		"/app.js":     "renderFlowPanel",
+		"/styles.css": ".flow-panel",
+	} {
+		request := httptest.NewRequest(http.MethodGet, path, nil)
+		response := httptest.NewRecorder()
+		handler.ServeHTTP(response, request)
+		if response.Code != http.StatusOK || !strings.Contains(response.Body.String(), expected) {
+			t.Fatalf("GET %s status=%d missing %q", path, response.Code, expected)
+		}
+	}
+
+	request := httptest.NewRequest(http.MethodGet, "/api/attacks", nil)
+	response := httptest.NewRecorder()
+	handler.ServeHTTP(response, request)
+	if response.Code != http.StatusOK || !strings.Contains(response.Body.String(), `"flow"`) || !strings.Contains(response.Body.String(), `"actors"`) {
+		t.Fatalf("attack API is missing visualization data: status=%d", response.Code)
+	}
+}

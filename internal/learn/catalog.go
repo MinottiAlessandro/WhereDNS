@@ -14,17 +14,42 @@ type Topic struct {
 }
 
 type Attack struct {
-	ID            string   `json:"id"`
-	Name          string   `json:"name"`
-	Category      string   `json:"category"`
-	Risk          string   `json:"risk"`
-	Summary       string   `json:"summary"`
-	Mechanism     []string `json:"mechanism"`
-	Prerequisites []string `json:"prerequisites"`
-	Signals       []string `json:"signals"`
-	Defenses      []string `json:"defenses"`
-	LabScenario   string   `json:"lab_scenario,omitempty"`
-	Ethics        string   `json:"ethics"`
+	ID            string     `json:"id"`
+	Name          string     `json:"name"`
+	Category      string     `json:"category"`
+	Risk          string     `json:"risk"`
+	Summary       string     `json:"summary"`
+	Mechanism     []string   `json:"mechanism"`
+	Prerequisites []string   `json:"prerequisites"`
+	Signals       []string   `json:"signals"`
+	Defenses      []string   `json:"defenses"`
+	LabScenario   string     `json:"lab_scenario,omitempty"`
+	Ethics        string     `json:"ethics"`
+	Flow          AttackFlow `json:"flow"`
+}
+
+// AttackFlow is a safe, explanatory sequence diagram. It describes actors and
+// messages conceptually; it is not an executable attack recipe.
+type AttackFlow struct {
+	Title   string      `json:"title"`
+	Caption string      `json:"caption"`
+	Actors  []FlowActor `json:"actors"`
+	Events  []FlowEvent `json:"events"`
+}
+
+type FlowActor struct {
+	ID    string `json:"id"`
+	Label string `json:"label"`
+	Role  string `json:"role"`
+	Kind  string `json:"kind"`
+}
+
+type FlowEvent struct {
+	From   string `json:"from"`
+	To     string `json:"to"`
+	Label  string `json:"label"`
+	Detail string `json:"detail"`
+	Kind   string `json:"kind"`
 }
 
 var topics = []Topic{
@@ -211,6 +236,9 @@ func TopicByID(id string) (Topic, bool) {
 
 func Attacks() []Attack {
 	out := append([]Attack(nil), attacks...)
+	for i := range out {
+		out[i].Flow = attackFlows[out[i].ID]
+	}
 	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
 	return out
 }
@@ -219,6 +247,7 @@ func AttackByID(id string) (Attack, bool) {
 	id = strings.ToLower(strings.TrimSpace(id))
 	for _, attack := range attacks {
 		if attack.ID == id {
+			attack.Flow = attackFlows[attack.ID]
 			return attack, true
 		}
 	}

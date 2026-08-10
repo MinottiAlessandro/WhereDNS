@@ -6,7 +6,7 @@
 
 WhereDNS is a DNS learning, visualization, and defensive-security utility. The native CLI is the primary application; the same engine also powers an optional local web interface.
 
-Current release: **v0.1.0**.
+Current release: **v0.2.0**.
 
 It is designed to answer two questions at the same time:
 
@@ -36,6 +36,16 @@ Launch the optional visualization UI:
 ```
 
 The web server deliberately refuses non-loopback bind addresses. The standalone CLI does not depend on the web interface.
+
+The web interface adds interactive sequence diagrams without changing how DNS is queried. After a query, select any numbered exchange to see which actors communicated, what crossed the trust boundary, and why it matters. The diagrams distinguish:
+
+- a cache hit from a real network exchange;
+- the visible client-to-recursive-resolver exchange from unobservable resolver internals;
+- direct root → TLD → authoritative trace hops, including the server actually contacted at each step;
+- response status, record counts, transport, byte size, timing, and cache provenance; and
+- ordinary exchanges, suspicious states, attack paths, and defensive controls.
+
+On narrow screens, the sequence canvas scrolls horizontally while the page itself remains contained. The numbered event reader remains usable without interpreting color alone.
 
 ## Commands
 
@@ -116,6 +126,8 @@ The default path is the platform user cache directory, normally `~/.cache/whered
 - the referral, CNAME redirect, NODATA result, or final-answer decision;
 - delegation NS records, DS proofs, and glue/address hints.
 
+The web trace graph renders each outgoing question and incoming response separately. This makes an important protocol fact visible: WhereDNS follows the referral and contacts the next server; root and TLD servers do not recursively contact downstream servers on its behalf. Cached direct responses are marked explicitly and are not drawn as network traffic.
+
 In-bailiwick glue is distinguished from out-of-bailiwick address hints. When a referral contains no usable address, this first release bootstraps the name-server address through the machine's configured recursive resolver and says so explicitly in the trace.
 
 Direct DNS traffic may be blocked by restrictive networks. That is a network policy outcome, not necessarily a DNS error.
@@ -142,6 +154,8 @@ The attack catalog currently covers:
 - lame or cyclic delegation.
 
 Each entry separates prerequisites from mechanism, observable signals, and mitigations. That separation is useful in exams and real incident analysis: a plausible mechanism is not evidence that it occurred.
+
+Every atlas entry also includes a full-width interactive actor graph. Select an event to follow the attack sequence and read its exact meaning. Malicious actions, trust-boundary warnings, ordinary protocol exchanges, cache state, and mitigations use distinct labels and line styles; the textual event reader carries the same meaning for accessibility. Labs linked to an atlas entry reuse that threat model before walking through their safe deterministic exercise.
 
 ## Isolated laboratory
 
@@ -214,7 +228,7 @@ make test
 make check
 ```
 
-Tests cover cache expiry, SOA negative TTLs, a loopback DNS exchange and cache hit, IDN normalization, curriculum completeness, lab safety constraints, and web security/API behavior.
+Tests cover cache expiry, SOA negative TTLs, a loopback DNS exchange and cache hit, IDN normalization, curriculum and attack-graph completeness, lab safety constraints, visualization assets, and web security/API behavior.
 
 ## Protocol references
 

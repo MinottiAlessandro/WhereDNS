@@ -76,7 +76,9 @@ func (e *Engine) Trace(ctx context.Context, options QueryOptions) (*TraceResult,
 		step := TraceStep{
 			Number: hop, Role: used.Role, Server: used.Name, Address: used.Address,
 			Question: currentName + " " + qtypeName, Rcode: result.Rcode,
-			DurationMS: result.DurationMS, Records: result.Records,
+			DurationMS: result.DurationMS, FromCache: result.FromCache,
+			Transport: result.Transport, ResponseBytes: result.Wire.ResponseBytes,
+			Records: result.Records,
 		}
 		if msg.Rcode != dns.RcodeSuccess {
 			step.Event = result.Rcode

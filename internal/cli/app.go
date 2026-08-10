@@ -22,7 +22,7 @@ import (
 )
 
 // Version is replaced from the Git tag in release builds.
-var Version = "0.1.0"
+var Version = "0.2.0"
 
 type App struct {
 	ctx    context.Context
